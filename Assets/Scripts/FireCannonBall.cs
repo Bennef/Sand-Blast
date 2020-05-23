@@ -1,24 +1,31 @@
 ﻿using UnityEngine;
 
 namespace SandBlast
-{ 
+{
     /// <summary>
     /// Handles the firing of cannonballs.
+    /// Credit to Jason Weimann for help with the basics of this script.
     /// </summary>
     public class FireCannonBall : MonoBehaviour
     {
-        [SerializeField]
-        private Rigidbody cannonballInstance;
-
         [SerializeField]
         [Range(10f, 80f)]
         private float angle = 45f;
 
         private AudioSource aSrc;
 
+        [SerializeField]
+        private Transform cannonball;
+        private Rigidbody rb;
+
+        private float time = 0.2f;
+        private float timer;
+
+
         void Start()
         {
             aSrc = GetComponent<AudioSource>();
+            timer = time;
         }
 
         /// <summary>
@@ -26,8 +33,11 @@ namespace SandBlast
         /// </summary>
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            timer -= Time.deltaTime;
+            if (Input.GetMouseButtonDown(0) && timer < 0)
             {
+                timer = time;
+                // Raycast to point on screen.
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 RaycastHit hitInfo;
@@ -47,9 +57,9 @@ namespace SandBlast
             aSrc.Play();
             var velocity = BallisticVelocity(point, angle);
 
-            cannonballInstance.transform.position = transform.position;
-            cannonballInstance.isKinematic = false;
-            cannonballInstance.velocity = velocity;
+            var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
+            rb = cannonball.GetComponent<Rigidbody>();
+            ball.GetComponent<Rigidbody>().velocity = velocity;
         }
 
         /// <summary>
