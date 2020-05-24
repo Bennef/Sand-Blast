@@ -70,10 +70,7 @@ namespace SandBlast
                 GameOver();
             }
 
-            if (timer < 0 && !gameOver && !levelClear)
-            {
-                HandleInput();
-            }
+             HandleInput();
         }
 
         /// <summary>
@@ -102,7 +99,11 @@ namespace SandBlast
                 {
                     StartCoroutine(LoadNextScene());
                 }
-                else
+                else if (gameOver)
+                {
+                    StartCoroutine(ReloadScene());
+                }
+                else if(timer < 0)
                 {
                     timer = time;
                     cannon.Fire();
@@ -141,6 +142,18 @@ namespace SandBlast
         {
             levelClear = true;
             levelClearText.enabled = true;
+        }
+
+
+        private IEnumerator ReloadScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().ToString());
+
+            // Wait until the asynchronous scene fully loads
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
 
         /// <summary>
