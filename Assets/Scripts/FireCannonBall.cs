@@ -10,7 +10,7 @@ namespace SandBlast
     {
         [SerializeField]
         [Range(10f, 80f)]
-        private float angle = 45f;
+        private float angle = 25f;
 
         private AudioSource aSrc;
 
@@ -37,10 +37,11 @@ namespace SandBlast
         private void Update()
         {
             timer -= Time.deltaTime; // Use a delay to prevent spamming.
+                
             if (Input.GetMouseButtonDown(0) && timer < 0)
             {
                 timer = time;
-                // Raycast to point on screen.
+                //Raycast to point on screen.
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
                 RaycastHit hitInfo;

@@ -55,11 +55,11 @@ namespace SandBlast
         public void UpdateBlockCount()
         {
             blocksLeft = 0;
-            var blocks = castle.GetComponentsInChildren<Blocko>();
+            var blocks = castle.GetComponentsInChildren<Block>();
 
-            foreach (Blocko block in blocks)
+            foreach (Block block in blocks)
             {
-                if (block.isActivel)
+                if (block.isActive)
                 {
                     blocksLeft += 1;
                 }
