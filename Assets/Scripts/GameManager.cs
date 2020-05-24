@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace SandBlast
 {
@@ -14,14 +16,12 @@ namespace SandBlast
         private GameObject castle;
         private Cannon cannon;
 
-        private Text blockCountText;
-        private Text ballCountText;
-        private Text gameOverText;
-
+        private Text blockCountText, ballCountText, gameOverText, levelClearText;
+ 
         private float time = 0.2f;
         private float timer;
 
-        private bool gameOver = false;
+        private bool gameOver, levelClear = false;
 
         // Use this for initialization
         void Start()
@@ -32,6 +32,7 @@ namespace SandBlast
             blockCountText = GameObject.Find("Blocks Left").GetComponent<Text>();
             gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             ballCountText = GameObject.Find("Balls Left").GetComponent<Text>();
+            levelClearText = GameObject.Find("Level Clear Label").GetComponent<Text>();
 
             castle = GameObject.Find("Castle");
 
@@ -53,24 +54,32 @@ namespace SandBlast
             UpdateBlockCount();
             UpdateBlockCountUI();
 
+            if (blocksLeft < 1)
+            {
+                LevelClear();
+            }
+
+            if (levelClear && Input.GetMouseButtonDown(0))
+            {
+                StartCoroutine(LoadNextScene());
+            }
+
             // If there are no balls left and any blocks...
             if (cannonBallsLeft == 0 && blocksLeft > 0)
             {
                 GameOver();
             }
 
-            if (Input.GetMouseButtonDown(0) && timer < 0 && !gameOver)
+            if (timer < 0 && !gameOver && !levelClear)
             {
-                timer = time;
-                cannon.Fire();
-                UpdateBallCount();
+                HandleInput();
             }
         }
 
         /// <summary>
         /// Blocks are counted if they are above -3 on the y axis.
         /// </summary>
-        public void UpdateBlockCount()
+        private void UpdateBlockCount()
         {
             blocksLeft = 0;
             var blocks = castle.GetComponentsInChildren<Block>();
@@ -85,29 +94,68 @@ namespace SandBlast
         }
 
 
-        public void UpdateBallCount()
+        private void HandleInput()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (levelClear)
+                {
+                    StartCoroutine(LoadNextScene());
+                }
+                else
+                {
+                    timer = time;
+                    cannon.Fire();
+                    UpdateBallCount();
+                }
+            }
+        }
+
+        private void UpdateBallCount()
         {
             cannonBallsLeft -= 1;
             UpdateBallCountUI();
         }
 
 
-        public void UpdateBlockCountUI()
+        private void UpdateBlockCountUI()
         {
             blockCountText.text = blocksLeft.ToString();
         }
 
 
-        public void UpdateBallCountUI()
+        private void UpdateBallCountUI()
         {
             ballCountText.text = cannonBallsLeft.ToString();
         }
 
 
-        public void GameOver()
+        private void GameOver()
         {
             gameOver = true;
             gameOverText.enabled = true;
+        }
+
+
+        private void LevelClear()
+        {
+            levelClear = true;
+            levelClearText.enabled = true;
+        }
+
+        /// <summary>
+        /// Asynchronously load next scene.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator LoadNextScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+
+            // Wait until the asynchronous scene fully loads
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
     }
 }
