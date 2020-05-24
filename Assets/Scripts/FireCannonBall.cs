@@ -21,11 +21,14 @@ namespace SandBlast
         private float time = 0.2f;
         private float timer;
 
+        private GameManager gameManager;
+
 
         void Start()
         {
             aSrc = GetComponent<AudioSource>();
             timer = time;
+            gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace SandBlast
         /// </summary>
         private void Update()
         {
-            timer -= Time.deltaTime;
+            timer -= Time.deltaTime; // Use a delay to prevent spamming.
             if (Input.GetMouseButtonDown(0) && timer < 0)
             {
                 timer = time;
@@ -60,6 +63,9 @@ namespace SandBlast
             var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
             rb = cannonball.GetComponent<Rigidbody>();
             ball.GetComponent<Rigidbody>().velocity = velocity;
+
+            // Update the ball count.
+            gameManager.UpdateBallCount();
         }
 
         /// <summary>

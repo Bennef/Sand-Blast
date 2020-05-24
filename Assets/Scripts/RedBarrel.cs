@@ -2,6 +2,9 @@
 
 namespace SandBlast
 {
+    /// <summary>
+    /// Red barrels will explode when hit by the ball, causing a wave.
+    /// </summary>
     public class RedBarrel : MonoBehaviour
     {
         public GameObject brokenBarrel;
