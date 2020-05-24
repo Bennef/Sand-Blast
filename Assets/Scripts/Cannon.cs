@@ -6,7 +6,7 @@ namespace SandBlast
     /// Handles the firing of cannonballs.
     /// Credit to Jason Weimann for help with the basics of this script.
     /// </summary>
-    public class FireCannonBall : MonoBehaviour
+    public class Cannon : MonoBehaviour
     {
         [SerializeField]
         [Range(10f, 80f)]
@@ -18,55 +18,33 @@ namespace SandBlast
         private Transform cannonball;
         private Rigidbody rb;
 
-        private float time = 0.2f;
-        private float timer;
-
         private GameManager gameManager;
 
 
         void Start()
         {
             aSrc = GetComponent<AudioSource>();
-            timer = time;
-            gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-        }
-
-        /// <summary>
-        /// Handle input.
-        /// </summary>
-        private void Update()
-        {
-            timer -= Time.deltaTime; // Use a delay to prevent spamming.
-                
-            if (Input.GetMouseButtonDown(0) && timer < 0)
-            {
-                timer = time;
-                //Raycast to point on screen.
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                RaycastHit hitInfo;
-                if (Physics.Raycast(ray, out hitInfo))
-                {
-                    FireAtPoint(hitInfo.point);
-                }
-            }
         }
 
         /// <summary>
         /// Fire at point of click.
         /// </summary>
         /// <param name="point"></param>
-        private void FireAtPoint(Vector3 point)
+        public void Fire()
         {
             aSrc.Play();
-            var velocity = BallisticVelocity(point, angle);
 
-            var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
-            rb = cannonball.GetComponent<Rigidbody>();
-            ball.GetComponent<Rigidbody>().velocity = velocity;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            // Update the ball count.
-            gameManager.UpdateBallCount();
+            RaycastHit hitInfo;
+            if (Physics.Raycast(ray, out hitInfo))
+            {
+                var velocity = BallisticVelocity(hitInfo.point, angle);
+
+                var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
+                rb = cannonball.GetComponent<Rigidbody>();
+                ball.GetComponent<Rigidbody>().velocity = velocity;
+            }
         }
 
         /// <summary>

@@ -12,14 +12,23 @@ namespace SandBlast
         private int cannonBallsLeft;
 
         private GameObject castle;
+        private Cannon cannon;
 
         private Text blockCountText;
         private Text ballCountText;
         private Text gameOverText;
 
+        private float time = 0.2f;
+        private float timer;
+
+        private bool gameOver = false;
+
         // Use this for initialization
         void Start()
         {
+            timer = time;
+
+            cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
             blockCountText = GameObject.Find("Blocks Left").GetComponent<Text>();
             gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             ballCountText = GameObject.Find("Balls Left").GetComponent<Text>();
@@ -39,6 +48,8 @@ namespace SandBlast
         // Update is called once per frame
         void Update()
         {
+            timer -= Time.deltaTime; // Use a delay to prevent spamming.
+
             UpdateBlockCount();
             UpdateBlockCountUI();
 
@@ -46,6 +57,13 @@ namespace SandBlast
             if (cannonBallsLeft == 0 && blocksLeft > 0)
             {
                 GameOver();
+            }
+
+            if (Input.GetMouseButtonDown(0) && timer < 0 && !gameOver)
+            {
+                timer = time;
+                cannon.Fire();
+                UpdateBallCount();
             }
         }
 
@@ -88,6 +106,7 @@ namespace SandBlast
 
         public void GameOver()
         {
+            gameOver = true;
             gameOverText.enabled = true;
         }
     }
