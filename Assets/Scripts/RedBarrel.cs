@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace SandBlast
 {
@@ -7,12 +8,12 @@ namespace SandBlast
     /// </summary>
     public class RedBarrel : MonoBehaviour
     {
-        public GameObject brokenBarrel;
+        public GameObject explosion;
 
-        public float radius = 5.0F;
-        public float power = 100.0F;
+        public AudioSource aSrc;
 
-        private Rigidbody rb;
+        private MeshCollider meshColl;
+        private MeshRenderer meshRen;
 
         /// <summary>
         /// When the cannonball hits the red barrel, make it explode.
@@ -22,11 +23,20 @@ namespace SandBlast
         {
             if (other.gameObject.tag == "CannonBall")
             {
-                rb = GetComponent<Rigidbody>();
-                rb.AddExplosionForce(power, transform.position, radius, 3.0F);
-                Instantiate(brokenBarrel, transform.position, transform.rotation);
-                Destroy(this.gameObject);
+                aSrc.Play();
+                Instantiate(explosion, transform.position, transform.rotation);
+                StartCoroutine(Explode());
             }
+        }
+
+        private IEnumerator Explode()
+        {
+            meshColl = GetComponent<MeshCollider>();
+            meshColl.enabled = false;
+            meshRen = GetComponent<MeshRenderer>();
+            meshRen.enabled = false;
+            yield return new WaitForSeconds(2);
+            Destroy(this.gameObject);
         }
     }
 }
