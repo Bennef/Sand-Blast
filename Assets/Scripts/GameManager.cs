@@ -23,7 +23,9 @@ namespace SandBlast
 
         private bool gameOver, levelClear = false;
 
-        // Use this for initialization
+        /// <summary>
+        /// Set up references.
+        /// </summary>
         void Start()
         {
             timer = time;
@@ -40,18 +42,18 @@ namespace SandBlast
             {
                 blocksLeft += 1;
             }
-            UpdateBlockCount();
-            UpdateBlockCountUI();
 
             UpdateBallCountUI();
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Update blocks, check for level clear, check for game over, handle input.
+        /// </summary>
         void Update()
         {
             timer -= Time.deltaTime; // Use a delay to prevent spamming.
 
-            UpdateBlockCount();
+            CountBlocksLeft();
             UpdateBlockCountUI();
 
             if (blocksLeft < 1)
@@ -59,24 +61,19 @@ namespace SandBlast
                 LevelClear();
             }
 
-            if (levelClear && Input.GetMouseButtonDown(0))
-            {
-                StartCoroutine(LoadNextScene());
-            }
-
             // If there are no balls left and any blocks...
-            if (cannonBallsLeft == 0 && blocksLeft > 0)
+            if (cannonBallsLeft < 1 && blocksLeft > 0)
             {
                 GameOver();
             }
 
-             HandleInput();
+             HandleInput();            
         }
 
         /// <summary>
         /// Blocks are counted if they are above -3 on the y axis.
         /// </summary>
-        private void UpdateBlockCount()
+        private void CountBlocksLeft()
         {
             blocksLeft = 0;
             var blocks = castle.GetComponentsInChildren<Block>();
@@ -90,7 +87,9 @@ namespace SandBlast
             }
         }
 
-
+        /// <summary>
+        /// Check iff level clear, then if Game over, then if timer is ready allow firing.
+        /// </summary>
         private void HandleInput()
         {
             if (Input.GetMouseButtonDown(0))
@@ -101,9 +100,9 @@ namespace SandBlast
                 }
                 else if (gameOver)
                 {
-                    StartCoroutine(ReloadScene());
+                    ReloadScene();
                 }
-                else if(timer < 0)
+                else if (timer < 0)
                 {
                     timer = time;
                     cannon.Fire();
@@ -111,6 +110,7 @@ namespace SandBlast
                 }
             }
         }
+
 
         private void UpdateBallCount()
         {
@@ -144,16 +144,13 @@ namespace SandBlast
             levelClearText.enabled = true;
         }
 
-
-        private IEnumerator ReloadScene()
+        /// <summary>
+        /// Reload the current scene.
+        /// </summary>
+        private void ReloadScene()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().ToString());
-
-            // Wait until the asynchronous scene fully loads
-            while (!asyncLoad.isDone)
-            {
-                yield return null;
-            }
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
 
         /// <summary>
