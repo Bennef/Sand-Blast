@@ -18,12 +18,14 @@ namespace SandBlast
 
         Block[] blocks;
 
-        private Text blockCountText, ballCountText, gameOverText, levelClearText, countdownTimerText;
+        private Text levelText, blockCountText, ballCountText, gameOverText, levelClearText, countdownTimerText;
  
         private float delayTime = 0.2f;
         private float fireTimer, countDownTimer;
 
         private bool gameOver, levelClear = false;
+
+        Scene scene;
 
         /// <summary>
         /// Set up references.
@@ -37,6 +39,10 @@ namespace SandBlast
             castle = GameObject.Find("Castle");
             blocks = castle.GetComponentsInChildren<Block>();
 
+            scene = SceneManager.GetActiveScene();
+
+            levelText = GameObject.Find("Level Text").GetComponent<Text>();
+            gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             blockCountText = GameObject.Find("Blocks Left").GetComponent<Text>();
             gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             ballCountText = GameObject.Find("Balls Left").GetComponent<Text>();
@@ -44,6 +50,8 @@ namespace SandBlast
             countdownTimerText = GameObject.Find("Count Down Timer").GetComponent<Text>();
 
             UpdateBallCountUI();
+
+            UpdateLevelText();
         }
 
         /// <summary>
@@ -137,6 +145,11 @@ namespace SandBlast
             ballCountText.text = cannonBallsLeft.ToString();
         }
 
+        private void UpdateLevelText()
+        {
+            levelText.text = scene.name;
+        }
+
         /// <summary>
         /// Check that blocks are still on the platfrom.
         /// </summary>
@@ -168,7 +181,6 @@ namespace SandBlast
         /// </summary>
         private void ReloadScene()
         {
-            Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
 
