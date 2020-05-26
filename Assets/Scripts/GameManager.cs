@@ -142,11 +142,11 @@ namespace SandBlast
         /// </summary>
         private IEnumerator GameOverCheck()
         {
-            countDownTimer = 3;
+            countDownTimer = 4;
             
             countdownTimerText.enabled = true;
             // Wait for 3 seconds to allow any blocks to fall off...
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(4);
             countdownTimerText.enabled = false;
             if (blocksLeft > 0 && !levelClear)
             {

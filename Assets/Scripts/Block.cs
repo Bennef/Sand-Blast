@@ -22,6 +22,7 @@ namespace SandBlast
         /// </summary>
         void OnBecameInvisible()
         {
+            isActive = false;
             Destroy(gameObject);
         }
     }
