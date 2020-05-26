@@ -82,8 +82,8 @@ namespace SandBlast
                     countdownTimerText.text = countDownTimer.ToString().Substring(0, 3);
                 }
             }
-
-             HandleInput();            
+            
+            HandleInput();            
         }
 
         /// <summary>

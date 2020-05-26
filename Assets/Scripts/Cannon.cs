@@ -9,8 +9,7 @@ namespace SandBlast
     public class Cannon : MonoBehaviour
     {
         [SerializeField]
-        [Range(10f, 80f)]
-        private float angle = 25f;
+        private float force = 40f;
 
         private AudioSource aSrc;
 
@@ -39,7 +38,7 @@ namespace SandBlast
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo))
             {
-                var velocity = BallisticVelocity(hitInfo.point, angle);
+                var velocity = BallisticVelocity(hitInfo.point, force);
 
                 var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
                 rb = cannonball.GetComponent<Rigidbody>();
@@ -51,21 +50,12 @@ namespace SandBlast
         /// Calculate the required velocity for the cannonball.
         /// </summary>
         /// <param name="destination"></param>
-        /// <param name="angle"></param>
+        /// <param name="force"></param>
         /// <returns></returns>
-        private Vector3 BallisticVelocity(Vector3 destination, float angle)
+        private Vector3 BallisticVelocity(Vector3 destination, float force)
         {
             Vector3 dir = destination - transform.position; // get Target Direction
-            float height = dir.y; // get height difference
-            dir.y = 0; // retain only the horizontal difference
-            float dist = dir.magnitude; // get horizontal direction
-            float a = angle * Mathf.Deg2Rad; // Convert angle to radians
-            dir.y = dist * Mathf.Tan(a); // set dir to the elevation angle.
-            dist += height / Mathf.Tan(a); // Correction for small height differences
-
-            // Calculate the velocity magnitude
-            float velocity = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * a));
-            return velocity * dir.normalized; // Return a normalized vector.
+            return dir.normalized * force; // Return a normalized vector.
         }
     }
 }
