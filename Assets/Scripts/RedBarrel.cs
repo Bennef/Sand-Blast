@@ -29,6 +29,10 @@ namespace SandBlast
             }
         }
 
+        /// <summary>
+        /// Disable Mesh and collider before destroying to allow sound to play.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator Explode()
         {
             meshColl = GetComponent<MeshCollider>();

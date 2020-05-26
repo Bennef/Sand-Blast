@@ -9,17 +9,19 @@ namespace SandBlast
     {
         [SerializeField]
         private int currentLevel;
-        private int blocksLeft = 0;
+        private int blocksLeft;
         [SerializeField]
         private int cannonBallsLeft;
 
         private GameObject castle;
         private Cannon cannon;
 
-        private Text blockCountText, ballCountText, gameOverText, levelClearText;
+        Block[] blocks;
+
+        private Text blockCountText, ballCountText, gameOverText, levelClearText, countdownTimerText;
  
-        private float time = 0.2f;
-        private float timer;
+        private float delayTime = 0.2f;
+        private float fireTimer, countDownTimer;
 
         private bool gameOver, levelClear = false;
 
@@ -28,20 +30,18 @@ namespace SandBlast
         /// </summary>
         void Start()
         {
-            timer = time;
+            fireTimer = delayTime;
+            countDownTimer = -1; // Set this to -1 because if it were 0, the GameOverCheck corountine would get called after countdown timer reaches 0.
 
             cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
+            castle = GameObject.Find("Castle");
+            blocks = castle.GetComponentsInChildren<Block>();
+
             blockCountText = GameObject.Find("Blocks Left").GetComponent<Text>();
             gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             ballCountText = GameObject.Find("Balls Left").GetComponent<Text>();
             levelClearText = GameObject.Find("Level Clear Label").GetComponent<Text>();
-
-            castle = GameObject.Find("Castle");
-
-            foreach (Transform child in castle.transform)
-            {
-                blocksLeft += 1;
-            }
+            countdownTimerText = GameObject.Find("Count Down Timer").GetComponent<Text>();
 
             UpdateBallCountUI();
         }
@@ -51,7 +51,7 @@ namespace SandBlast
         /// </summary>
         void Update()
         {
-            timer -= Time.deltaTime; // Use a delay to prevent spamming.
+            fireTimer -= Time.deltaTime; // Use a delay to prevent spamming.
 
             CountBlocksLeft();
             UpdateBlockCountUI();
@@ -64,7 +64,15 @@ namespace SandBlast
             // If there are no balls left and any blocks...
             if (cannonBallsLeft < 1 && blocksLeft > 0)
             {
-                GameOver();
+                if (countDownTimer == -1)
+                {
+                    StartCoroutine(GameOverCheck());
+                }
+                else
+                {
+                    countDownTimer -= Time.deltaTime;
+                    countdownTimerText.text = countDownTimer.ToString().Substring(0, 3);
+                }
             }
 
              HandleInput();            
@@ -76,8 +84,7 @@ namespace SandBlast
         private void CountBlocksLeft()
         {
             blocksLeft = 0;
-            var blocks = castle.GetComponentsInChildren<Block>();
-
+            
             foreach (Block block in blocks)
             {
                 if (block.isActive)
@@ -102,9 +109,9 @@ namespace SandBlast
                 {
                     ReloadScene();
                 }
-                else if (timer < 0)
+                else if (fireTimer < 0 && cannonBallsLeft > 0)
                 {
-                    timer = time;
+                    fireTimer = delayTime;
                     cannon.Fire();
                     UpdateBallCount();
                 }
@@ -130,17 +137,29 @@ namespace SandBlast
             ballCountText.text = cannonBallsLeft.ToString();
         }
 
-
-        private void GameOver()
+        /// <summary>
+        /// Check that blocks are still on the platfrom.
+        /// </summary>
+        private IEnumerator GameOverCheck()
         {
-            gameOver = true;
-            gameOverText.enabled = true;
+            countDownTimer = 3;
+            
+            countdownTimerText.enabled = true;
+            // Wait for 3 seconds to allow any blocks to fall off...
+            yield return new WaitForSeconds(3);
+            countdownTimerText.enabled = false;
+            if (blocksLeft > 0 && !levelClear)
+            {
+                gameOver = true;
+                gameOverText.enabled = true;
+            }
         }
 
 
         private void LevelClear()
         {
             levelClear = true;
+            countdownTimerText.enabled = false;
             levelClearText.enabled = true;
         }
 
