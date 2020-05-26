@@ -19,7 +19,8 @@ namespace SandBlast
         Block[] blocks;
 
         private Text levelText, blockCountText, ballCountText, gameOverText, levelClearText, countdownTimerText;
- 
+        private Image gameOverPanel, levelClearPanel, timerPanel;
+
         private float delayTime = 0.2f;
         private float fireTimer, countDownTimer;
 
@@ -48,6 +49,10 @@ namespace SandBlast
             ballCountText = GameObject.Find("Balls Left").GetComponent<Text>();
             levelClearText = GameObject.Find("Level Clear Label").GetComponent<Text>();
             countdownTimerText = GameObject.Find("Count Down Timer").GetComponent<Text>();
+
+            gameOverPanel = GameObject.Find("Game Over Panel").GetComponent<Image>();
+            levelClearPanel = GameObject.Find("Level Clear Panel").GetComponent<Image>();
+            timerPanel = GameObject.Find("Timer Panel").GetComponent<Image>();
 
             UpdateBallCountUI();
 
@@ -95,7 +100,7 @@ namespace SandBlast
             
             foreach (Block block in blocks)
             {
-                if (block.isActive)
+                if (block.notClear)
                 {
                     blocksLeft += 1;
                 }
@@ -158,22 +163,29 @@ namespace SandBlast
             countDownTimer = 4;
             
             countdownTimerText.enabled = true;
+            timerPanel.enabled = true;
             // Wait for 3 seconds to allow any blocks to fall off...
             yield return new WaitForSeconds(4);
             countdownTimerText.enabled = false;
+            timerPanel.enabled = false;
             if (blocksLeft > 0 && !levelClear)
             {
                 gameOver = true;
                 gameOverText.enabled = true;
+                gameOverPanel.enabled = true;
             }
         }
 
-
+        /// <summary>
+        /// Level is clear so hide the timer and show the level clear message.
+        /// </summary>
         private void LevelClear()
         {
             levelClear = true;
             countdownTimerText.enabled = false;
+            timerPanel.enabled = false;
             levelClearText.enabled = true;
+            levelClearPanel.enabled = true;
         }
 
         /// <summary>

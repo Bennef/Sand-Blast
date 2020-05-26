@@ -4,7 +4,7 @@ namespace SandBlast
 {
     public class Block : MonoBehaviour
     {
-        public bool isActive = true;
+        public bool notClear = true;
 
         /// <summary>
         /// If the blocks fall below the platform level, they are cleared.
@@ -13,7 +13,7 @@ namespace SandBlast
         {
             if (gameObject.transform.position.y < -3)
             {
-                isActive = false;
+                notClear = false;
             }
         }
 
@@ -22,8 +22,7 @@ namespace SandBlast
         /// </summary>
         void OnBecameInvisible()
         {
-            isActive = false;
-            Destroy(gameObject);
+            notClear = false;
         }
     }
 }

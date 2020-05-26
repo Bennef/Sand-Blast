@@ -15,6 +15,13 @@ namespace SandBlast
         private MeshCollider meshColl;
         private MeshRenderer meshRen;
 
+
+        void Start()
+        {
+            meshColl = GetComponent<MeshCollider>();
+            meshRen = GetComponent<MeshRenderer>();
+        }
+
         /// <summary>
         /// When the cannonball hits the red barrel, make it explode.
         /// </summary>
@@ -23,8 +30,6 @@ namespace SandBlast
         {
             if (other.gameObject.tag == "CannonBall")
             {
-                aSrc.Play();
-                Instantiate(explosion, transform.position, transform.rotation);
                 StartCoroutine(Explode());
             }
         }
@@ -35,9 +40,9 @@ namespace SandBlast
         /// <returns></returns>
         private IEnumerator Explode()
         {
-            meshColl = GetComponent<MeshCollider>();
+            Instantiate(explosion, transform.position, transform.rotation);
+            aSrc.Play();
             meshColl.enabled = false;
-            meshRen = GetComponent<MeshRenderer>();
             meshRen.enabled = false;
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);

@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: f366ff4a580549d46bd9648af798b724
+timeCreated: 1590502125
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Balsamiq Sans
+  fontNames:
+  - Balsamiq Sans
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
