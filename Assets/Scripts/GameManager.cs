@@ -131,25 +131,34 @@ namespace SandBlast
             }
         }
 
-
+        /// <summary>
+        /// Updates the number of balls the player has left. 
+        /// </summary>
         private void UpdateBallCount()
         {
             cannonBallsLeft -= 1;
             UpdateBallCountUI();
         }
 
-
+        /// <summary>
+        /// Updates the number of active blocks left.
+        /// </summary>
         private void UpdateBlockCountUI()
         {
             blockCountText.text = blocksLeft.ToString();
         }
 
-
+        /// <summary>
+        /// Updates the UI label for number of balls left.
+        /// </summary>
         private void UpdateBallCountUI()
         {
             ballCountText.text = cannonBallsLeft.ToString();
         }
 
+        /// <summary>
+        /// Updates the UI for current level.
+        /// </summary>
         private void UpdateLevelText()
         {
             levelText.text = scene.name;

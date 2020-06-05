@@ -7,14 +7,16 @@ namespace SandBlast
     /// </summary>
     public class LookAtMouse : MonoBehaviour
     {
-        // Update is called once per frame
+        /// <summary>
+        /// Point the cannon in the direction of the mouse cursor.
+        /// </summary>
         void Update()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hitInfo;
             if (Physics.Raycast(ray, out hitInfo))
             {
-                transform.LookAt(hitInfo.point); // TO DO - clamp this angle.
+                transform.LookAt(hitInfo.point); // TO DO - clamp this angle so the cannon only points within a certain range.
             }
         }
     }
