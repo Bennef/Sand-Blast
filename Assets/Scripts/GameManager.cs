@@ -28,6 +28,7 @@ namespace SandBlast
 
         Scene scene;
 
+
         /// <summary>
         /// Set up references.
         /// </summary>
