@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 23451764624624600}
   - component: {fileID: 54875171669267166}
   m_Layer: 0
-  m_Name: Grass Platforn
+  m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

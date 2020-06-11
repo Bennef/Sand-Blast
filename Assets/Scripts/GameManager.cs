@@ -26,6 +26,9 @@ namespace SandBlast
 
         private bool gameOver, levelClear = false;
 
+        private AudioSource aSrc;
+        public AudioClip fail, success;
+
         Scene scene;
 
 
@@ -40,9 +43,7 @@ namespace SandBlast
             cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
             castle = GameObject.Find("Castle");
             blocks = castle.GetComponentsInChildren<Block>();
-
-            scene = SceneManager.GetActiveScene();
-
+            
             levelText = GameObject.Find("Level Text").GetComponent<Text>();
             gameOverText = GameObject.Find("Game Over Label").GetComponent<Text>();
             blockCountText = GameObject.Find("Blocks Left").GetComponent<Text>();
@@ -54,6 +55,10 @@ namespace SandBlast
             gameOverPanel = GameObject.Find("Game Over Panel").GetComponent<Image>();
             levelClearPanel = GameObject.Find("Level Clear Panel").GetComponent<Image>();
             timerPanel = GameObject.Find("Timer Panel").GetComponent<Image>();
+
+            aSrc = gameObject.GetComponent<AudioSource>();
+
+            scene = SceneManager.GetActiveScene();
 
             UpdateBallCountUI();
 
@@ -70,13 +75,13 @@ namespace SandBlast
             CountBlocksLeft();
             UpdateBlockCountUI();
 
-            if (blocksLeft < 1)
+            if (blocksLeft < 1 && !levelClear)
             {
                 LevelClear();
             }
 
             // If there are no balls left and any blocks...
-            if (cannonBallsLeft < 1 && blocksLeft > 0)
+            if (cannonBallsLeft < 1 && blocksLeft > 0 && gameOver == false)
             {
                 if (countDownTimer == -1)
                 {
@@ -170,12 +175,12 @@ namespace SandBlast
         /// </summary>
         private IEnumerator GameOverCheck()
         {
-            countDownTimer = 4;
+            countDownTimer = 3;
             
             countdownTimerText.enabled = true;
             timerPanel.enabled = true;
             // Wait for 3 seconds to allow any blocks to fall off...
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(3);
             countdownTimerText.enabled = false;
             timerPanel.enabled = false;
             if (blocksLeft > 0 && !levelClear)
@@ -183,6 +188,8 @@ namespace SandBlast
                 gameOver = true;
                 gameOverText.enabled = true;
                 gameOverPanel.enabled = true;
+                aSrc.clip = fail;
+                aSrc.Play();
             }
         }
 
@@ -196,6 +203,8 @@ namespace SandBlast
             timerPanel.enabled = false;
             levelClearText.enabled = true;
             levelClearPanel.enabled = true;
+            aSrc.clip = success;
+            aSrc.Play();
         }
 
         /// <summary>
