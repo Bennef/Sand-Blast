@@ -16,9 +16,7 @@ namespace SandBlast
         [SerializeField]
         private Transform cannonball;
         private Rigidbody rb;
-
-        private GameManager gameManager;
-
+        
 
         void Start()
         {

@@ -24,10 +24,10 @@ namespace SandBlast
         private float delayTime = 0.2f;
         private float fireTimer, countDownTimer;
 
-        private bool gameOver, levelClear = false;
+        private bool gameOver, levelClear, gameComplete = false;
 
         private AudioSource aSrc;
-        public AudioClip fail, success;
+        public AudioClip tickTock, fail, success, gameCompleted;
 
         Scene scene;
 
@@ -75,9 +75,19 @@ namespace SandBlast
             CountBlocksLeft();
             UpdateBlockCountUI();
 
-            if (blocksLeft < 1 && !levelClear)
+            if (blocksLeft < 1 && !levelClear && !gameComplete)
             {
-                LevelClear();
+                countdownTimerText.enabled = false;
+                timerPanel.enabled = false;
+
+                if (scene.name == "14")
+                {
+                    GameComplete();
+                }
+                else
+                {
+                    LevelClear();
+                }
             }
 
             // If there are no balls left and any blocks...
@@ -120,7 +130,11 @@ namespace SandBlast
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (levelClear)
+                if (gameComplete)
+                {
+                    RestartGame();
+                }
+                else if (levelClear)
                 {
                     StartCoroutine(LoadNextScene());
                 }
@@ -175,21 +189,22 @@ namespace SandBlast
         /// </summary>
         private IEnumerator GameOverCheck()
         {
-            countDownTimer = 3;
+            countDownTimer = 2.7f;
             
             countdownTimerText.enabled = true;
             timerPanel.enabled = true;
+            PlaySound(tickTock);
             // Wait for 3 seconds to allow any blocks to fall off...
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(2.7f);
             countdownTimerText.enabled = false;
             timerPanel.enabled = false;
             if (blocksLeft > 0 && !levelClear)
             {
+                PlaySound(fail);
+
                 gameOver = true;
                 gameOverText.enabled = true;
                 gameOverPanel.enabled = true;
-                aSrc.clip = fail;
-                aSrc.Play();
             }
         }
 
@@ -198,13 +213,32 @@ namespace SandBlast
         /// </summary>
         private void LevelClear()
         {
+            PlaySound(success);
+            
             levelClear = true;
-            countdownTimerText.enabled = false;
-            timerPanel.enabled = false;
             levelClearText.enabled = true;
             levelClearPanel.enabled = true;
-            aSrc.clip = success;
-            aSrc.Play();
+        }
+
+        /// <summary>
+        /// Game is completed if we are in the final scene and all blocks are cleared.
+        /// </summary>
+        public void GameComplete()
+        {
+            PlaySound(gameCompleted);
+
+            gameOverText.text = "Thanks for playing! Try again?";
+            gameOverText.enabled = true;
+            gameOverPanel.enabled = true;
+            gameComplete = true;
+        }
+
+        /// <summary>
+        /// Restart the gane from scene 1.
+        /// </summary>
+        private void RestartGame()
+        {
+            SceneManager.LoadScene("1");
         }
 
         /// <summary>
@@ -228,6 +262,15 @@ namespace SandBlast
             {
                 yield return null;
             }
+        }
+
+        /// <summary>
+        /// Play the passed AudioClip.
+        /// </summary>
+        public void PlaySound(AudioClip clip)
+        {
+            aSrc.clip = clip;
+            aSrc.Play();
         }
     }
 }

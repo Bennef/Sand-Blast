@@ -965,11 +965,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114010756740501576, guid: b1a730981bf227348887a3e6db88f861,
-        type: 2}
-      propertyPath: cannonBallsLeft
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b1a730981bf227348887a3e6db88f861, type: 2}
   m_IsPrefabParent: 0

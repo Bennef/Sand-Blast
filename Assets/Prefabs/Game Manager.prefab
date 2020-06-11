@@ -134,5 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevel: 0
   cannonBallsLeft: 10
+  tickTock: {fileID: 8300000, guid: 1ce1b27ecbe626843b595ff44b7041df, type: 3}
   fail: {fileID: 8300000, guid: ea18b4123b5da214fb0fd2ed5409c6b0, type: 3}
   success: {fileID: 8300000, guid: 94b5dbe2a2c04f94c926fee8ed11cdca, type: 3}
+  gameCompleted: {fileID: 8300000, guid: 101626fbd0912f94e92cfc882a1140d9, type: 3}
