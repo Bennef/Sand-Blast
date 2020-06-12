@@ -116,7 +116,7 @@ namespace SandBlast
             
             foreach (Block block in blocks)
             {
-                if (block.notClear)
+                if (!block.cleared)
                 {
                     blocksLeft += 1;
                 }

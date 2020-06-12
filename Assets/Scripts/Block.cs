@@ -4,7 +4,7 @@ namespace SandBlast
 {
     public class Block : MonoBehaviour
     {
-        public bool notClear = true;
+        public bool cleared = false;
 
         private float clearedDistance = 10f;
 
@@ -12,7 +12,7 @@ namespace SandBlast
         
 
         /// <summary>
-        /// Set up references.
+        /// Store the block starting position. We will need this to determine if the block has been sufficiently displaced to clear it.
         /// </summary>
         void Start()
         {
@@ -24,24 +24,24 @@ namespace SandBlast
         /// </summary>
         void Update()
         {
-            float distanceFromPlatform = Vector3.Distance(gameObject.transform.position, startPosition);
+            float distanceFromStartPosition = Vector3.Distance(gameObject.transform.position, startPosition);
 
-            if (gameObject.transform.position.y < -3 || distanceFromPlatform > clearedDistance)
+            if (gameObject.transform.position.y < -3 || distanceFromStartPosition > clearedDistance)
             {
-                notClear = false;
+                cleared = true;
             }
             else
             {
-                notClear = true; // It's possible a block may fly straight up and land on the platform.
+                cleared = false; // It's possible a block may fly straight up and land on the platform.
             }
         }
 
         /// <summary>
-        /// Destroy the ball if it goes out of camera view.
+        /// Destroy the block if it goes out of camera view.
         /// </summary>
         void OnBecameInvisible()
         {
-            notClear = false;
+            cleared = false;
         }
     }
 }

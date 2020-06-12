@@ -23,10 +23,10 @@ namespace SandBlast
             aSrc = GetComponent<AudioSource>();
         }
 
+
         /// <summary>
         /// Fire at point of click.
         /// </summary>
-        /// <param name="point"></param>
         public void Fire()
         {
             aSrc.Play();
@@ -34,6 +34,7 @@ namespace SandBlast
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             RaycastHit hitInfo;
+
             if (Physics.Raycast(ray, out hitInfo))
             {
                 var velocity = BallisticVelocity(hitInfo.point, force);
@@ -47,8 +48,8 @@ namespace SandBlast
         /// <summary>
         /// Calculate the required velocity for the cannonball.
         /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="force"></param>
+        /// <param name="destination">Destination will be the hit point of the raycast.</param>
+        /// <param name="force">Force of the cannonball.</param>
         /// <returns></returns>
         private Vector3 BallisticVelocity(Vector3 destination, float force)
         {
