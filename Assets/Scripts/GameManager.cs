@@ -61,7 +61,6 @@ namespace SandBlast
             scene = SceneManager.GetActiveScene();
 
             UpdateBallCountUI();
-
             UpdateLevelText();
         }
 
@@ -103,7 +102,6 @@ namespace SandBlast
                     countdownTimerText.text = countDownTimer.ToString().Substring(0, 3);
                 }
             }
-            
             HandleInput();            
         }
 

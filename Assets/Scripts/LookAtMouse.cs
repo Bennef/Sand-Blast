@@ -14,9 +14,7 @@ namespace SandBlast
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            RaycastHit hitInfo;
-
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 transform.LookAt(hitInfo.point); // TO DO - clamp this angle so the cannon only points within a certain range.
             }

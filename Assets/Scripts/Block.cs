@@ -6,7 +6,7 @@ namespace SandBlast
     {
         public bool cleared = false;
 
-        private float clearedDistance = 10f;
+        private readonly float clearedDistance = 15f;
 
         private Vector3 startPosition;
         
@@ -25,15 +25,7 @@ namespace SandBlast
         void Update()
         {
             float distanceFromStartPosition = Vector3.Distance(gameObject.transform.position, startPosition);
-
-            if (gameObject.transform.position.y < -3 || distanceFromStartPosition > clearedDistance)
-            {
-                cleared = true;
-            }
-            else
-            {
-                cleared = false; // It's possible a block may fly straight up and land on the platform.
-            }
+            cleared = gameObject.transform.position.y < -3 || distanceFromStartPosition > clearedDistance ? true : false;
         }
 
         /// <summary>

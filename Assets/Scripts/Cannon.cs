@@ -33,9 +33,7 @@ namespace SandBlast
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            RaycastHit hitInfo;
-
-            if (Physics.Raycast(ray, out hitInfo))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 var velocity = BallisticVelocity(hitInfo.point, force);
 
