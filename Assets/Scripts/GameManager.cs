@@ -188,14 +188,16 @@ namespace SandBlast
         private IEnumerator GameOverCheck()
         {
             countDownTimer = 2.7f;
-            
             countdownTimerText.enabled = true;
             timerPanel.enabled = true;
             PlaySound(tickTock);
+            
             // Wait for 3 seconds to allow any blocks to fall off...
             yield return new WaitForSeconds(2.7f);
+            
             countdownTimerText.enabled = false;
             timerPanel.enabled = false;
+
             if (blocksLeft > 0 && !levelClear)
             {
                 PlaySound(fail);

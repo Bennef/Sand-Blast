@@ -23,7 +23,6 @@ namespace SandBlast
             aSrc = GetComponent<AudioSource>();
         }
 
-
         /// <summary>
         /// Fire at point of click.
         /// </summary>
@@ -48,7 +47,7 @@ namespace SandBlast
         /// </summary>
         /// <param name="destination">Destination will be the hit point of the raycast.</param>
         /// <param name="force">Force of the cannonball.</param>
-        /// <returns></returns>
+        /// <returns>Normalised vector of velocity for ball</returns>
         private Vector3 BallisticVelocity(Vector3 destination, float force)
         {
             Vector3 dir = destination - transform.position; // get Target Direction
