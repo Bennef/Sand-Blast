@@ -1,25 +1,26 @@
-﻿using System.Collections;
+﻿using Scripts.Audio;
+using System.Collections;
 using UnityEngine;
 
-namespace SandBlast
+namespace Scripts.Environment
 {
     /// <summary>
     /// Red barrels will explode when hit by the ball, causing a wave.
     /// </summary>
     public class RedBarrel : MonoBehaviour
     {
-        public GameObject explosion;
+        [SerializeField] private GameObject _explosion;
+        [SerializeField] private MeshCollider _meshColl;
+        [SerializeField] private MeshRenderer _meshRen;
+        private SFXManager _sFXManager;
 
-        public AudioSource aSrc;
-
-        private MeshCollider meshColl;
-        private MeshRenderer meshRen;
-
+        public GameObject Explosion { get => _explosion; set => _explosion = value; }
 
         void Start()
         {
-            meshColl = GetComponent<MeshCollider>();
-            meshRen = GetComponent<MeshRenderer>();
+            _meshColl = GetComponent<MeshCollider>();
+            _meshRen = GetComponent<MeshRenderer>();
+            _sFXManager = FindObjectOfType<SFXManager>();
         }
 
         /// <summary>
@@ -28,10 +29,8 @@ namespace SandBlast
         /// <param name="other">The other thing colliding with this thing.</param>
         void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.tag == "CannonBall")
-            {
+            if (other.gameObject.CompareTag("CannonBall"))
                 StartCoroutine(Explode());
-            }
         }
 
         /// <summary>
@@ -40,10 +39,10 @@ namespace SandBlast
         /// <returns></returns>
         private IEnumerator Explode()
         {
-            Instantiate(explosion, transform.position, transform.rotation);
-            aSrc.Play();
-            meshColl.enabled = false;
-            meshRen.enabled = false;
+            Instantiate(Explosion, transform.position, transform.rotation);
+            _sFXManager.PlaySound(_sFXManager.Explosion);
+            _meshColl.enabled = false;
+            _meshRen.enabled = false;
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);
         }

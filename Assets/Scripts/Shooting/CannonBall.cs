@@ -7,9 +7,6 @@ namespace SandBlast
         /// <summary>
         /// Destroy the ball if it goes out of camera view.
         /// </summary>
-        void OnBecameInvisible()
-        {
-            Destroy(gameObject);
-        }
+        void OnBecameInvisible() => Destroy(gameObject);
     }
 }

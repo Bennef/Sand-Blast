@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Scripts.Audio;
+using UnityEngine;
 
-namespace SandBlast
+namespace Scripts.Shooting
 {
     /// <summary>
     /// Handles the firing of cannonballs.
@@ -8,36 +9,24 @@ namespace SandBlast
     /// </summary>
     public class Cannon : MonoBehaviour
     {
-        [SerializeField]
-        private float force = 40f;
+        [SerializeField] private float _force = 40f;
+        [SerializeField] private Transform _cannonball;
+        private SFXManager _sFXManager;
 
-        private AudioSource aSrc;
-
-        [SerializeField]
-        private Transform cannonball;
-        private Rigidbody rb;
-        
-
-        void Start()
-        {
-            aSrc = GetComponent<AudioSource>();
-        }
+        void Start() => _sFXManager = FindObjectOfType<SFXManager>();
 
         /// <summary>
         /// Fire at point of click.
         /// </summary>
         public void Fire()
         {
-            aSrc.Play();
-
+            _sFXManager.PlaySound(_sFXManager.Fire);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                var velocity = BallisticVelocity(hitInfo.point, force);
-
-                var ball = Instantiate(cannonball, transform.position, Quaternion.identity);
-                rb = cannonball.GetComponent<Rigidbody>();
+                var velocity = BallisticVelocity(hitInfo.point, _force);
+                var ball = Instantiate(_cannonball, transform.position, Quaternion.identity);
                 ball.GetComponent<Rigidbody>().velocity = velocity;
             }
         }
