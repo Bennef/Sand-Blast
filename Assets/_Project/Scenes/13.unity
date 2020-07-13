@@ -874,6 +874,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1165161461554430, guid: b1a730981bf227348887a3e6db88f861, type: 3}
+      propertyPath: m_Name
+      value: Game Manager
+      objectReference: {fileID: 0}
     - target: {fileID: 4232068713041012, guid: b1a730981bf227348887a3e6db88f861, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.48183045
@@ -906,10 +910,17 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114010756740501576, guid: b1a730981bf227348887a3e6db88f861,
-        type: 3}
-      propertyPath: cannonBallsLeft
-      value: 10
+    - target: {fileID: 4232068713041012, guid: b1a730981bf227348887a3e6db88f861, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232068713041012, guid: b1a730981bf227348887a3e6db88f861, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4232068713041012, guid: b1a730981bf227348887a3e6db88f861, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1a730981bf227348887a3e6db88f861, type: 3}

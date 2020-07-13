@@ -5,6 +5,7 @@ namespace Scripts.UI
 {
     public class UIManager : MonoBehaviour
     {
+        [Header("Text")]
         [SerializeField] private Text _levelText;
         [SerializeField] private Text _blockCountText;
         [SerializeField] private Text _gameOverText;
@@ -12,6 +13,7 @@ namespace Scripts.UI
         [SerializeField] private Text _levelClearText;
         [SerializeField] private Text _countdownTimerText;
 
+        [Header("Panels")]
         [SerializeField] private Image _gameOverPanel;
         [SerializeField] private Image _levelClearPanel;
         [SerializeField] private Image _timerPanel;

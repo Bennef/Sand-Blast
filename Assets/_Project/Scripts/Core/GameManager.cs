@@ -24,6 +24,8 @@ namespace Scripts.Core
         private InputHandler _inputHandler;
         private Scene _scene;
 
+        public bool GameOver { get => _gameOver; set => _gameOver = value; }
+
         /// <summary>
         /// Set up references.
         /// </summary>
