@@ -10,8 +10,8 @@ namespace Scripts.Environment
     public class RedBarrel : MonoBehaviour
     {
         [SerializeField] private GameObject _explosion;
-        [SerializeField] private MeshCollider _meshColl;
-        [SerializeField] private MeshRenderer _meshRen;
+        [SerializeField] private MeshRenderer[] _meshRends;
+        private MeshCollider _meshColl;
         private SFXManager _sFXManager;
 
         public GameObject Explosion { get => _explosion; set => _explosion = value; }
@@ -19,7 +19,6 @@ namespace Scripts.Environment
         void Start()
         {
             _meshColl = GetComponent<MeshCollider>();
-            _meshRen = GetComponent<MeshRenderer>();
             _sFXManager = FindObjectOfType<SFXManager>();
         }
 
@@ -39,10 +38,11 @@ namespace Scripts.Environment
         /// <returns></returns>
         private IEnumerator Explode()
         {
-            Instantiate(Explosion, transform.position, transform.rotation);
+            Destroy(Instantiate(Explosion, transform.position, transform.rotation), 1.5f);
             _sFXManager.PlaySound(_sFXManager.Explosion);
             _meshColl.enabled = false;
-            _meshRen.enabled = false;
+            foreach (MeshRenderer mesh in _meshRends)
+                mesh.enabled = false;
             yield return new WaitForSeconds(2);
             Destroy(this.gameObject);
         }

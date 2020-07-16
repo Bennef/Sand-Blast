@@ -21,7 +21,7 @@ namespace Scripts.Environment
         void Update()
         {
             float distanceFromStartPosition = Vector3.Distance(gameObject.transform.position, _startPosition);
-            _cleared = gameObject.transform.position.y < -3 || distanceFromStartPosition > _clearedDistance ? true : false;
+            _cleared = gameObject.transform.position.y < -3 || distanceFromStartPosition > _clearedDistance;
         }
 
         /// <summary>
