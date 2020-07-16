@@ -9,7 +9,7 @@ namespace Scripts.Shooting
     /// </summary>
     public class Cannon : MonoBehaviour
     {
-        [SerializeField] private float _force = 40f;
+        [SerializeField] private float _force = 35f;
         [SerializeField] private Transform _cannonball;
         private SFXManager _sFXManager;
 
