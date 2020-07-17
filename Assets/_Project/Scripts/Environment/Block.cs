@@ -7,14 +7,24 @@ namespace Scripts.Environment
         [SerializeField] private bool _cleared;
         [SerializeField] private readonly float _clearedDistance = 15f;
         private Vector3 _startPosition;
-
+        private AudioSource _aSrc;
         public bool Cleared => _cleared;
 
         /// <summary>
         /// Store the block starting position. We will need this to determine if the block has been sufficiently displaced to clear it.
         /// </summary>
-        void Start() => _startPosition = gameObject.transform.position;
- 
+        void Start()
+        {
+            _startPosition = gameObject.transform.position;
+            _aSrc = GetComponent<AudioSource>();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.relativeVelocity.magnitude > 20)
+                _aSrc.Play();
+        }
+
         /// <summary>
         /// If the blocks fall below the platform level or are a given distance away, they are cleared.
         /// </summary>

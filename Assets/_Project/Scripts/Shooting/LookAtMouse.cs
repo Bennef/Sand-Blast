@@ -13,6 +13,7 @@ namespace Scripts.Shooting
         private void Start()
         {
             _gameManager = FindObjectOfType<GameManager>();
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
         /// <summary>

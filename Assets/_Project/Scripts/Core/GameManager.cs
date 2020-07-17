@@ -27,7 +27,7 @@ namespace Scripts.Core
         public bool GameOver { get => _gameOver; set => _gameOver = value; }
 
         /// <summary>
-        /// Set up references.
+        /// Set up references. Update the ball count and level text.
         /// </summary>
         void Start()
         {
@@ -165,10 +165,14 @@ namespace Scripts.Core
         /// </summary>
         private void LevelClear()
         {
+            if (_sFXManager.ASrc.isPlaying)
+                _sFXManager.ASrc.Stop();
+            _uIManager.HideText(_uIManager.CountdownTimerText);
+            _uIManager.HidePanel(_uIManager.TimerPanel);
             _sFXManager.PlaySound(_sFXManager.Success);
-            _levelClear = true;
             _uIManager.ShowText(_uIManager.LevelClearText);
             _uIManager.ShowPanel(_uIManager.LevelClearPanel);
+            _levelClear = true;
         }
 
         /// <summary>
