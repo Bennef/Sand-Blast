@@ -11,7 +11,7 @@ namespace Scripts.Core
 {
     public class GameManager : MonoBehaviour
     {
-        [SerializeField] private int _cannonBallsLeft;
+        [SerializeField] private int _ballsLeft;
         [SerializeField] private int _blocksLeft;
         [SerializeField] private bool _gameOver, _levelClear, _gameComplete;
         private GameObject _castle;
@@ -25,13 +25,34 @@ namespace Scripts.Core
         private Scene _scene;
 
         public bool GameOver { get => _gameOver; set => _gameOver = value; }
+        
+        private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
+
+        void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+        
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            _ballsLeft = 10;
+            _fireTimer = _delayTime;
+            _countDownTimer = -1; // Set this to -1 because if it were 0, the GameOverCheck corountine would get called after countdown timer reaches 0.
+            _levelClear = false;
+            _cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
+            _castle = GameObject.Find("Castle");
+            _blocks = _castle.GetComponentsInChildren<Block>();
+            _scene = SceneManager.GetActiveScene();
+            _uIManager = FindObjectOfType<UIManager>();
+            _sFXManager = FindObjectOfType<SFXManager>();
+            _inputHandler = FindObjectOfType<InputHandler>();
+            UpdateBallCountUI();
+            UpdateLevelText();
+        }
 
         /// <summary>
         /// Set up references. Update the ball count and level text.
         /// </summary>
-        void Start()
+        /*void Start()
         {
-            _cannonBallsLeft = 10;
+            _ballsLeft = 10;
             _fireTimer = _delayTime;
             _countDownTimer = -1; // Set this to -1 because if it were 0, the GameOverCheck corountine would get called after countdown timer reaches 0.
             _cannon = GameObject.Find("Cannon").GetComponent<Cannon>();
@@ -43,7 +64,7 @@ namespace Scripts.Core
             _inputHandler = FindObjectOfType<InputHandler>();
             UpdateBallCountUI();
             UpdateLevelText();
-        }
+        }*/
 
         /// <summary>
         /// Update blocks, check for level clear, check for game over, handle input.
@@ -65,7 +86,7 @@ namespace Scripts.Core
                     LevelClear();
             }
 
-            if (_cannonBallsLeft < 1 && _blocksLeft > 0 && _gameOver == false)
+            if (_ballsLeft < 1 && _blocksLeft > 0 && _gameOver == false)
             {
                 if (_countDownTimer == -1)
                     StartCoroutine(GameOverCheck());
@@ -105,7 +126,7 @@ namespace Scripts.Core
                     StartCoroutine(LoadNextScene());
                 else if (_gameOver)
                     SceneManager.LoadScene(_scene.name);
-                else if (_fireTimer < 0 && _cannonBallsLeft > 0)
+                else if (_fireTimer < 0 && _ballsLeft > 0)
                 {
                     _fireTimer = _delayTime;
                     _cannon.Fire();
@@ -119,7 +140,7 @@ namespace Scripts.Core
         /// </summary>
         private void UpdateBallCount()
         {
-            _cannonBallsLeft -= 1;
+            _ballsLeft -= 1;
             UpdateBallCountUI();
         }
 
@@ -131,7 +152,7 @@ namespace Scripts.Core
         /// <summary>
         /// Updates the UI label for number of balls left.
         /// </summary>
-        private void UpdateBallCountUI() => _uIManager.SetText(_uIManager.BallCountText, _cannonBallsLeft.ToString());
+        private void UpdateBallCountUI() => _uIManager.SetText(_uIManager.BallCountText, _ballsLeft.ToString());
 
         /// <summary>
         /// Updates the UI for current level.

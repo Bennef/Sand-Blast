@@ -1,4 +1,5 @@
 ﻿using Scripts.Audio;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scripts.Shooting
@@ -10,10 +11,22 @@ namespace Scripts.Shooting
     public class Cannon : MonoBehaviour
     {
         [SerializeField] private float _force = 35f;
-        [SerializeField] private Transform _cannonball;
-        private SFXManager _sFXManager;
+        [SerializeField] private GameObject _cannonballPrefab;
+        [SerializeField] int _cannonballCount = 10;
+        [SerializeField] private List<GameObject> _ballPool;
+        [SerializeField] int _cannonballIndex = 0;
+        SFXManager _sFXManager;
 
-        void Start() => _sFXManager = FindObjectOfType<SFXManager>();
+        void Start()
+        {
+            _sFXManager = FindObjectOfType<SFXManager>();
+            for (int i = 0; i < _cannonballCount; i++)
+            {
+                _ballPool.Add(_cannonballPrefab);
+                _ballPool[i].gameObject.SetActive(false);
+                Instantiate(_ballPool[i], transform.position, Quaternion.identity);
+            }
+        }
 
         /// <summary>
         /// Fire at point of click.
@@ -25,10 +38,23 @@ namespace Scripts.Shooting
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                var velocity = BallisticVelocity(hitInfo.point, _force);
-                var ball = Instantiate(_cannonball, transform.position, Quaternion.identity);
-                ball.GetComponent<Rigidbody>().velocity = velocity;
+                //var ball = Instantiate(_ballPool[_cannonballIndex], transform.position, Quaternion.identity);
+                GameObject ball = GetBall();
+                if (ball != null)
+                {
+                    ball.SetActive(true);
+                    print(ball.GetInstanceID().ToString());
+                    print(ball.activeInHierarchy);
+                    var velocity = BallisticVelocity(hitInfo.point, _force);
+                    ball.GetComponent<Rigidbody>().velocity = velocity;
+                    _cannonballIndex++;
+                }
             }
+        }
+
+        private GameObject GetBall()
+        {
+            return _ballPool[_cannonballIndex];
         }
 
         /// <summary>
@@ -39,8 +65,8 @@ namespace Scripts.Shooting
         /// <returns>Normalised vector of velocity for ball</returns>
         private Vector3 BallisticVelocity(Vector3 destination, float force)
         {
-            Vector3 dir = destination - transform.position; // get Target Direction
-            return dir.normalized * force; // Return a normalized vector.
+            Vector3 dir = destination - transform.position; // get target Direction
+            return dir.normalized * force; // return a normalized vector.
         }
     }
 }
